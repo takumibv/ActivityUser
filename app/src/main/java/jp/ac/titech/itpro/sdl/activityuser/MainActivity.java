@@ -1,11 +1,15 @@
 package jp.ac.titech.itpro.sdl.activityuser;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import static android.content.Intent.ACTION_CAMERA_BUTTON;
 
 public class MainActivity extends AppCompatActivity {
     private final static int MYREQCODE = 1234;
@@ -35,11 +39,14 @@ public class MainActivity extends AppCompatActivity {
                 request = getString(R.string.request_3_text);
                 break;
         }
-        Intent intent = new Intent();
-        intent.setClassName("jp.ac.titech.itpro.sdl.activityprovider",
-                "jp.ac.titech.itpro.sdl.activityprovider.PublicActivity");
-        intent.putExtra("request", request);
-        startActivityForResult(intent, MYREQCODE);
+
+        try {
+            Intent intent = new Intent("jp.ac.titech.itpro.action.MyProvider");
+            intent.putExtra("request", request);
+            startActivityForResult(intent, MYREQCODE);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "利用先Activityが見つからない。", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
